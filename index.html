@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 3.5rem;">Your Task Dashboard</h1>
+
+        <div id="messageBox" class="msg-info"></div>
+
+        <div class="form-section">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Task</h2>
+            <div class="form-group">
+                <label for="taskDescription">Task Description:</label>
+                <input type="text" id="taskDescription" placeholder="e.g., Organize project files, Schedule team meeting">
+            </div>
+            <button id="createTaskBtn" class="btn w-full">Add New Task</button>
+        </div>
+
+        <div class="tasks-list">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Current Tasks:</h2>
+            <div id="tasksContainer">
+                <p class="text-gray-500 text-center text-lg p-4" id="noTasksMessage">Loading tasks...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="updateModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeUpdateModalBtn">&times;</button>sss
+            <h2>Update Task Details</h2>
+            <input type="hidden" id="updateTaskId">
+            <div class="form-group">
+                <label for="updateDescription">New Description:</label>
+                <input type="text" id="updateDescription">
+            </div>
+            <div class="form-group">
+                <label for="updateStatus">New Status:</label>
+                <select id="updateStatus">
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button id="submitUpdateBtn" class="btn flex-1">Save Changes</button>
+                <button id="cancelUpdateBtn" class="btn btn-cancel flex-1">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+5</body>
+</html>
