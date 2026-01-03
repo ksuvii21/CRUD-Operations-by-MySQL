@@ -6,7 +6,6 @@ const taskDescriptionInput = document.getElementById('taskDescription');
 const createTaskBtn = document.getElementById('createTaskBtn');
 const tasksContainer = document.getElementById('tasksContainer');
 const noTasksMessage = document.getElementById('noTasksMessage');
-
 const updateModalOverlay = document.getElementById('updateModalOverlay');
 const closeUpdateModalBtn = document.getElementById('closeUpdateModalBtn');
 const updateTaskIdInput = document.getElementById('updateTaskId');
@@ -14,7 +13,6 @@ const updateDescriptionInput = document.getElementById('updateDescription');
 const updateStatusSelect = document.getElementById('updateStatus');
 const submitUpdateBtn = document.getElementById('submitUpdateBtn');
 const cancelUpdateBtn = document.getElementById('cancelUpdateBtn');
-
 const messageBox = document.getElementById('messageBox');
 
 function showMessage(message, type = 'info') {
@@ -41,7 +39,6 @@ async function fetchTasks() {
     noTasksMessage.textContent = "Fetching your tasks...";
     noTasksMessage.style.display = 'block';
     tasksContainer.innerHTML = '';
-
     try {
         console.log(`Attempting to fetch from: ${API_BASE_URL}/tasks`);
         const response = await fetch(`${API_BASE_URL}/tasks`);
@@ -51,18 +48,15 @@ async function fetchTasks() {
             throw new Error(`HTTP error! Status: ${response.status}. Details: ${errorDetails.error}`);
         }
         const tasks = await response.json();
-
         if (tasks.length === 0) {
             noTasksMessage.textContent = "Your task list is sparkling clean! Add a new task above.";
             noTasksMessage.style.display = 'block';
             return;
         }
         noTasksMessage.style.display = 'none';
-
         tasks.forEach(task => {
             const taskItem = document.createElement('div');
             taskItem.className = 'task-item';
-
             taskItem.innerHTML = `
                 <div class="task-details">
                     <div class="task-id">ID: ${task.id.substring(0, 8)}</div>
@@ -99,7 +93,6 @@ createTaskBtn.addEventListener('click', async () => {
         showMessage("Please enter a task description!", 'warn');
         return;
     }
-
     try {
         const response = await fetch(`${API_BASE_URL}/tasks`, {
             method: 'POST',
@@ -108,7 +101,6 @@ createTaskBtn.addEventListener('click', async () => {
             },
             body: JSON.stringify({ description: description })
         });
-
         if (response.ok) {
             const newTask = await response.json();
             showMessage(`Task "${newTask.description}" added successfully!`, 'success');
@@ -130,21 +122,17 @@ function setupUpdateForm(id, description, status) {
     updateStatusSelect.value = status;
     updateModalOverlay.classList.add('visible');
 }
-
 function hideUpdateModal() {
     updateModalOverlay.classList.remove('visible');
 }
-
 submitUpdateBtn.addEventListener('click', async () => {
     const id = updateTaskIdInput.value;
     const newDescription = updateDescriptionInput.value.trim();
     const newStatus = updateStatusSelect.value;
-
     if (!newDescription) {
         showMessage("Description cannot be empty for update!", 'warn');
         return;
     }
-
     try {
         const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
             method: 'PUT',
@@ -153,7 +141,6 @@ submitUpdateBtn.addEventListener('click', async () => {
             },
             body: JSON.stringify({ description: newDescription, status: newStatus })
         });
-
         if (response.ok) {
             showMessage("Task updated successfully!", 'success');
             hideUpdateModal();
@@ -167,24 +154,20 @@ submitUpdateBtn.addEventListener('click', async () => {
         showMessage("Could not connect to backend to update task.", 'error');
     }
 });
-
 cancelUpdateBtn.addEventListener('click', () => {
     hideUpdateModal();
     showMessage("Task update cancelled.", 'info');
 });
-
 closeUpdateModalBtn.addEventListener('click', () => {
     hideUpdateModal();
     showMessage("Task update cancelled.", 'info');
 });
-
 updateModalOverlay.addEventListener('click', (event) => {
     if (event.target === updateModalOverlay) {
         hideUpdateModal();
         showMessage("Task update cancelled.", 'info');
     }
 });
-
 function addEventListenersToButtons() {
     document.querySelectorAll('.btn-update').forEach(button => {
         button.onclick = () => {
@@ -195,19 +178,16 @@ function addEventListenersToButtons() {
             );
         };
     });
-
     document.querySelectorAll('.btn-delete').forEach(button => {
         button.onclick = async () => {
             const taskId = button.dataset.id;
             const taskDescriptionElement = button.closest('.task-item').querySelector('.task-description-display');
             const taskDescription = taskDescriptionElement ? taskDescriptionElement.textContent : 'this task';
-
             if (confirm(`Are you sure you want to permanently delete "${taskDescription}" (ID: ${taskId.substring(0,8)})? This action cannot be undone.`)) {
                 try {
                     const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
                         method: 'DELETE'
                     });
-
                     if (response.ok) {
                         showMessage(`Task "${taskDescription}" deleted successfully!`, 'success');
                         fetchTasks();
@@ -223,6 +203,4 @@ function addEventListenersToButtons() {
         };
     });
 }
-
 document.addEventListener('DOMContentLoaded', fetchTasks);
-
